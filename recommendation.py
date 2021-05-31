@@ -47,3 +47,25 @@ avaliacoes = {'Ana':
              'Norbit':1.0,
 	     'Exterminador do Futuro':4.0}
 }
+
+from math import sqrt
+
+# Calcula a distância euclidiana entre os dois usuários para poder verificar
+# a similaridade entre eles
+def euclidiana(usuario1, usuario2):
+    si = {}
+    # Na variável 'item' vai estar presente todos os filmes que o usuario1 avaliou
+    for item in avaliacoes[usuario1]:
+        # Verifica se os filmes que o usuario1 assistiu também está na lista de filmes
+        # do usuario2
+        if item in avaliacoes[usuario2]:
+            si[item] = 1
+
+    # Não existe filmes em comum entre os usuários
+    if len(si) == 0:
+        return 0
+
+    soma = sum([pow(avaliacoes[usuario1][item] - avaliacoes[usuario2][ítem], 2)
+                for item in avaliacoes[usuario1] if item in avaliacoes[usuario2]])
+
+    return 1/(1 + sqrt(soma))
