@@ -82,3 +82,28 @@ def getSimilares(usuario):
     similaridade.reverse()
 
     return similaridade
+
+# Receber um usuário por parâmetro e calcular todas as notas que o usuário
+# daria para os filmes
+def getRecomendacoes(usuario):
+    totais = {}
+    somaSimilaridade = {}
+    # A variável 'outro' vai receber o nome de todos os usuários
+    for outro in avaliacoes:
+        if outro == usuario: continue
+        # Calcula a distância do usuário 'usuario' com todos os outros
+        similaridade = euclidiana(usuario, outro)
+
+        if similaridade <= 0: continue
+
+        for item in avaliacoes[outro]:
+            if item not in avaliacoes[usuario]:
+                totais.setdefault(item, 0)
+                totais[item] += avaliacoes[outro][item] * similaridade
+                somaSimilaridade.setdefault(item, 0)
+                somaSimilaridade[item] += similaridade
+
+    rankings = [(total / somaSimilaridade[item], item) for item, total in totais.items()]
+    rankings.sort()
+    rankings.reverse()
+    return rankings
