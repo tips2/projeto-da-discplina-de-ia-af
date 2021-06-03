@@ -155,3 +155,16 @@ def getRecomendacoes(base, usuario):
     rankings.sort()
     rankings.reverse()
     return rankings
+
+def carregaMovieLens(path='C:/ml-100k'):
+    filmes = {}
+    for linha in open(path + '/u.item'):
+        (id, titulo) = linha.split('|')[0:2]
+        filmes[id] = titulo
+    # print(filmes)
+    base = {}
+    for linha in open(path + '/u.data'):
+        (usuario, idfilme, nota, tempo) = linha.split('\t')
+        base.setdefault(usuario, {})
+        base[usuario][filmes[idfilme]] = float(nota)
+    return base
