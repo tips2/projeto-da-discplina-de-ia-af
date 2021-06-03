@@ -1,4 +1,4 @@
-'''avaliacoes = {'Ana': 
+avaliacoesUsuarios = {'Ana': 
 		{'Freddy x Jason': 2.5, 
 		 'O Ultimato Bourne': 3.5,
 		 'Star Trek': 3.0, 
@@ -46,9 +46,9 @@
 	    {'O Ultimato Bourne':4.5,
              'Norbit':1.0,
 	     'Exterminador do Futuro':4.0}
-}'''
+}
 
-avaliacoes = {'Freddy x Jason': 
+avaliacoesFilme = {'Freddy x Jason': 
 		{'Ana': 2.5, 
 		 'Marcos:': 3.0 ,
 		 'Pedro': 2.5, 
@@ -100,13 +100,13 @@ from math import sqrt
 
 # Calcula a distância euclidiana entre os dois usuários para poder verificar
 # a similaridade entre eles
-def euclidiana(usuario1, usuario2):
+def euclidiana(base, usuario1, usuario2):
     si = 0
     # Na variável 'item' vai estar presente todos os filmes que o usuario1 avaliou
-    for item in avaliacoes[usuario1]:
+    for item in base[usuario1]:
         # Verifica se os filmes que o usuario1 assistiu também está na lista de filmes
         # do usuario2
-        if item in avaliacoes[usuario2]:
+        if item in base[usuario2]:
             si += 1
             
     # Não existe filmes em comum entre os usuários
@@ -114,17 +114,17 @@ def euclidiana(usuario1, usuario2):
         return 0
     
     soma = sum([ 
-        pow(avaliacoes[usuario1][item] - avaliacoes[usuario2][item], 2)
-            for item in avaliacoes[usuario1] if item in avaliacoes[usuario2]
+        pow(base[usuario1][item] - base[usuario2][item], 2)
+            for item in base[usuario1] if item in base[usuario2]
     ])
     
     return 1 / (1 + sqrt(soma))
 
 
-def getSimilares(usuario):
+def getSimilares(base, usuario):
     # Calculando a similaridade do usuário que chega por parâmetro com todos os outros
-    similaridade = [(euclidiana(usuario, outro), outro)
-                    for outro in avaliacoes if outro != usuario]
+    similaridade = [(euclidiana(base, usuario, outro), outro)
+                    for outro in base if outro != usuario]
     # Ordena em ordem crescente
     similaridade.sort()
     similaridade.reverse()
@@ -133,21 +133,21 @@ def getSimilares(usuario):
 
 # Receber um usuário por parâmetro e calcular todas as notas que o usuário
 # daria para os filmes
-def getRecomendacoes(usuario):
+def getRecomendacoes(base, usuario):
     totais = {}
     somaSimilaridade = {}
     # A variável 'outro' vai receber o nome de todos os usuários
-    for outro in avaliacoes:
+    for outro in base:
         if outro == usuario: continue
         # Calcula a distância do usuário 'usuario' com todos os outros
-        similaridade = euclidiana(usuario, outro)
+        similaridade = euclidiana(base, usuario, outro)
 
         if similaridade <= 0: continue
 
-        for item in avaliacoes[outro]:
-            if item not in avaliacoes[usuario]:
+        for item in base[outro]:
+            if item not in base[usuario]:
                 totais.setdefault(item, 0)
-                totais[item] += avaliacoes[outro][item] * similaridade
+                totais[item] += base[outro][item] * similaridade
                 somaSimilaridade.setdefault(item, 0)
                 somaSimilaridade[item] += similaridade
 
