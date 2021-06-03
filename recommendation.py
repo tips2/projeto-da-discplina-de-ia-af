@@ -168,3 +168,10 @@ def carregaMovieLens(path='C:/ml-100k'):
         base.setdefault(usuario, {})
         base[usuario][filmes[idfilme]] = float(nota)
     return base
+
+def calculaItensSimilares(base):
+    result = {}
+    for item in base:
+        notas = getSimilares(base, item)
+        result[item] = notas
+    return result
