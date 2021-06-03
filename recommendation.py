@@ -1,4 +1,4 @@
-avaliacoesUsuarios = {'Ana': 
+avaliacoesUsuario = {'Ana': 
 		{'Freddy x Jason': 2.5, 
 		 'O Ultimato Bourne': 3.5,
 		 'Star Trek': 3.0, 
@@ -133,7 +133,7 @@ def getSimilares(base, usuario):
 
 # Receber um usuário por parâmetro e calcular todas as notas que o usuário
 # daria para os filmes
-def getRecomendacoes(base, usuario):
+def getRecomendacoesUsuario(base, usuario):
     totais = {}
     somaSimilaridade = {}
     # A variável 'outro' vai receber o nome de todos os usuários
@@ -175,3 +175,19 @@ def calculaItensSimilares(base):
         notas = getSimilares(base, item)
         result[item] = notas
     return result
+
+def getRecomendacoesItens(baseUsuario, similaridadeItens, usuario):
+    notasUsuario = baseUsuario[usuario]
+    notas = {}
+    totalSimilaridade = {}
+    for (item, nota) in notasUsuario.items():
+        for (similaridade, item2) in similaridadeItens(item):
+            if item2 in notasUsuario: continue
+            notas.setdefault(item2, 0)
+            notas[item2] += similaridade * nota
+            totalSimilaridade.setdefault(item2, 0)
+            totalSimilaridade[item2] += similaridade
+    rankings = [(score/totalSimilaridade[item], item) for item, score in notas.items()]
+    rankings.sort()
+    rankings.reverse()
+    return rankings
