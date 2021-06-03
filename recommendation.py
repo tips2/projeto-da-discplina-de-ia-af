@@ -129,7 +129,7 @@ def getSimilares(base, usuario):
     similaridade.sort()
     similaridade.reverse()
 
-    return similaridade
+    return similaridade[0:30]
 
 # Receber um usuário por parâmetro e calcular todas as notas que o usuário
 # daria para os filmes
@@ -154,7 +154,7 @@ def getRecomendacoes(base, usuario):
     rankings = [(total / somaSimilaridade[item], item) for item, total in totais.items()]
     rankings.sort()
     rankings.reverse()
-    return rankings
+    return rankings[0:30]
 
 def carregaMovieLens(path='C:/ml-100k'):
     filmes = {}
